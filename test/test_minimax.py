@@ -3,37 +3,40 @@ from src.state import State
 
 
 def test_minimax():
-    b1 = TestState('b1', utility=3)
-    b2 = TestState('b2', utility=12)
-    b3 = TestState('b3', utility=8)
+    b1 = ExampleState('b1', utility=3)
+    b2 = ExampleState('b2', utility=12)
+    b3 = ExampleState('b3', utility=8)
 
-    c1 = TestState('c1', utility=2)
-    c2 = TestState('c2', utility=4)
-    c3 = TestState('c3', utility=6)
+    c1 = ExampleState('c1', utility=2)
+    c2 = ExampleState('c2', utility=4)
+    c3 = ExampleState('c3', utility=6)
 
-    d1 = TestState('d1', utility=14)
-    d2 = TestState('d2', utility=5)
-    d3 = TestState('d3', utility=2)
+    d1 = ExampleState('d1', utility=14)
+    d2 = ExampleState('d2', utility=5)
+    d3 = ExampleState('d3', utility=2)
 
-    B = TestState('B', successors=[b1, b2, b3])
-    C = TestState('C', successors=[c1, c2, c3])
-    D = TestState('D', successors=[d1, d2, d3])
-    A = TestState('A', successors=[A, B, C])
+    B = ExampleState('B', successors=[b1, b2, b3])
+    C = ExampleState('C', successors=[c1, c2, c3])
+    D = ExampleState('D', successors=[d1, d2, d3])
+    A = ExampleState('A', successors=[B, C, D])
 
     assert minimax_decision(A) is B
 
 
-class TestState(State):
+class ExampleState(State):
     def __init__(self, name, *, successors=[], utility=None):
-        self.__super__(name)
-        self.successors = successors
-        self.utility = utility
-
-    def is_terminal(self):
-        return len(self.successors) == 0
+        super().__init__(name)
+        self._successors = successors
+        self._utility = utility
 
     def successors(self):
-        return self.successors
+        return self._successors
 
+    @property
     def utility(self):
-        return self.utility
+        return self._utility
+
+    @utility.setter
+    def utility(self, value):
+        # TODO: should be immutable once set
+        self._utility = value
